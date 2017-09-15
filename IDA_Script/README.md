@@ -14,9 +14,9 @@ TOC
 		Feature:	
 		  1. connect seletors with member function pointer 
 		  2. get current member function's caller
-![image](https://github.com/lichao890427/idascript/blob/master/screenshots/add_xref_for_macho_1.png)
+![image](https://github.com/lichao890427/personal_script/blob/master/IDA_Script/screenshots/add_xref_for_macho_1.png)
 		  3. get member function where current 'msgSend' lead to
-![image](https://github.com/lichao890427/idascript/blob/master/screenshots/add_xref_for_macho_2.png)
+![image](https://github.com/lichao890427/personal_script/blob/master/IDA_Script/screenshots/add_xref_for_macho_2.png)
 
 ##2.read_unicode.py
 		Description:
@@ -26,7 +26,7 @@ TOC
 		  When deal with macho file, you only need to run the script, and it will automatically find 
 		unicode string in segment named "__ustring"; and if deal with other type, you need to  addtionally 
 		call function 'find_utf16_string(addr)' to find them
-![image](https://github.com/lichao890427/idascript/blob/master/screenshots/read_unicode.png)
+![image](https://github.com/lichao890427/personal_script/blob/master/IDA_Script/screenshots/read_unicode.png)
 		Notice: 
 		  Due to the disadvantable of python2 itself, there still many characters could not be shown
 
@@ -50,7 +50,7 @@ TOC
 		Description:
 		  this script is used to analysis block structure exist in macho file, target NSConcreteStackBlock/
 		  NSConcreteGlobalBlock currently, also contain some wonderful skills
-![image](https://github.com/lichao890427/idascript/blob/master/screenshots/add_block_for_macho.png)
+![image](https://github.com/lichao890427/personal_script/blob/master/IDA_Script/screenshots/add_block_for_macho.png)
 		  
 ##7.ida_utils.py
 		Description:
