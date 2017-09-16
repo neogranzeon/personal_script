@@ -1,6 +1,6 @@
 ![](https://github.com/lichao890427/personal_script/blob/master/LOGO.png)
 
-Li-Script - Scripts useful for Vulnerability Exploit, Static Analysis, Dynamic Analysis,  File Format Exploit, ...
+***Li-Script*** - Scripts useful for Vulnerability Exploit, Static Analysis, Dynamic Analysis,  File Format Exploit, ...
 
 This is a script set, currently based on while not limitied to following tools:
 
