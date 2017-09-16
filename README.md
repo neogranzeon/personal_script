@@ -11,7 +11,7 @@ This is a script set, currently based on while not limitied to following tools:
 
 ## Requirements:
 
-* If the meaning I described before makes any sense to you, then you know what you need
+* If you known the meaning above, then you know what you need
 * Any issues submit here
 
 ## Contact
