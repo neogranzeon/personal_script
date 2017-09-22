@@ -10,6 +10,7 @@ WIN = 0
 LINUX = 1
 MAC = 2
 
+
 class CppKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
@@ -24,19 +25,17 @@ class CppKernel(Kernel):
         self.compiler_path = None
         self.systype = -1  # 0:win 1:linux 2:mac
         if not self.find_compiler():
-            print "Cannot find compiler!!!"
+            print("Cannot find compiler!!!")
         else:
-            print "Use " + self.compiler_path
+            print("Use " + self.compiler_path)
 
     def do_execute(self, code, silent, store_history=True,
                    user_expressions=None, allow_stdin=False):
         self.compile_and_get_output(code)
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
-
     def do_shutdown(self, restart):
         pass
-
 
     def find_compiler(self):
         '''
@@ -67,14 +66,13 @@ class CppKernel(Kernel):
             if not os.path.exists(path + filename):
                 continue
             self.compiler_path = path + filename
-            print "Select " + self.compiler_path + " as compiler"
+            print("Select " + self.compiler_path + " as compiler")
             return True
-        print "Cannot find valid C/C++ compiler in PATH env"
+        print("Cannot find valid C/C++ compiler in PATH env")
         return False
 
-
     def compile_and_get_output(self, code):
-        print "input code: " + code
+        print("input code: " + code)
         if self.compiler_path == None and not self.find_compiler():
             return "Cannot find compiler!!!"
         infilepath = tempfile.NamedTemporaryFile().name + ".cpp"
@@ -95,13 +93,13 @@ class CppKernel(Kernel):
             try:
                 os.chmod(os.path.abspath(outfilepath), os.stat.S_IXUSR)
             except Exception as e:
-                print e.message
+                print(e.message)
             exeps = subprocess.Popen(outfilepath, stdout=subprocess.PIPE)
             exeps.wait()
             execute_result = exeps.stdout.read()
-            print execute_result
+            print(execute_result)
             self.send_response(self.iopub_socket, 'stream', {'name': 'stdout', 'text': execute_result})
         except Exception as e:
-            print e.message
+            print(e.message)
 
-# print CppKernel().compile_and_get_output('#include<stdio.h>\nint main(){printf("ok");return 0;}')
+            # print(CppKernel().compile_and_get_output('#include<stdio.h>\nint main(){printf("ok");return 0;}'))
