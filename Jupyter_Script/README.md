@@ -10,6 +10,7 @@ It's a wonderful notebook for coder. Please goto this website and search yoursel
 * I want try to development a jupyter kernel myself, and make a simplest c++ kernel for my personal use
 
 ## How do I install?
+* download clang from <http://releases.llvm.org/download.html> and install to any directory in $PATH 
 * git clone it
 * python setup.py or pip install .
 * python jupyter_cpp_kernel/install_cpp_kernel
