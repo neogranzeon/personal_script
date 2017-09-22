@@ -86,20 +86,22 @@ class CppKernel(Kernel):
         if self.systype == WIN:
             outfilepath += ".exe"
         try:
-            cmdps = subprocess.Popen(self.compiler_path + " " + infilepath + " -o " + outfilepath, stderr=subprocess.PIPE)
+            cmdps = subprocess.Popen([self.compiler_path, infilepath, "-o", outfilepath], stderr=subprocess.PIPE)
             cmdps.wait()
             compile_result = cmdps.stderr.read()
             if compile_result != "":
                 self.send_response(self.iopub_socket, 'stream', {'name': 'stderr', 'text': compile_result})
                 return
             try:
-                os.chmod(os.path.abspath(outfilepath), 777)
+                os.chmod(os.path.abspath(outfilepath), os.stat.S_IXUSR)
             except Exception as e:
                 print e.message
             exeps = subprocess.Popen(outfilepath, stdout=subprocess.PIPE)
             exeps.wait()
-            self.send_response(self.iopub_socket, 'stream', {'name': 'stdout', 'text': exeps.stdout.read()})
+            execute_result = exeps.stdout.read()
+            print execute_result
+            self.send_response(self.iopub_socket, 'stream', {'name': 'stdout', 'text': execute_result})
         except Exception as e:
             print e.message
 
-        # print compile_and_get_output('#include<stdio.h>\nint main(){printf("ok");return 0;}')
+# print CppKernel().compile_and_get_output('#include<stdio.h>\nint main(){printf("ok");return 0;}')
