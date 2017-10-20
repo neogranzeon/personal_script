@@ -37,4 +37,13 @@ def setbpatcall(funcaddr):
             AddBpt(begin)
         begin = begin + decode_insn(begin)
     		
-		
+def sortfuncbysize(begin, end):
+    addr=begin
+    addr_map = {}
+    while addr < end:
+        addrnext = NextFunction(addr)
+        addr_map[addr] = addrnext - addr
+        addr = addrnext
+    arr = sorted(addr_map.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)
+    for item in arr:
+        print("%x-%x" % (item[0], item[1]))
