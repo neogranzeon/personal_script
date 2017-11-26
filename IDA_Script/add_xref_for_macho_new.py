@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+# 此版本增加多线程添加xref和数据库记录功能，能在一定程度减少脚本运行时间
+
 import idc
 import threadpool
 import threading
