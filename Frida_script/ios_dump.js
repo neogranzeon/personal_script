@@ -1,6 +1,3 @@
-// https://codeshare.frida.re/@lichao890427/dump_ios/
-// https://github.com/lichao890427/frida_script   analysis_hook.js  => submit issues
-
 var O_RDONLY = 0;
 var O_WRONLY = 1;
 var O_RDWR = 2;
@@ -167,10 +164,13 @@ write = getExportFunction("f", "write", "int", ["int", "pointer", "int"]);
 lseek = getExportFunction("f", "lseek", "int64", ["int", "int64", "int"]);
 close = getExportFunction("f", "close", "int", ["int"]);
 
-function getCacheDir() {
-	var NSCachesDirectory = 13;
+function getCacheDir(index) {
 	var NSUserDomainMask = 1;
-	var npdirs = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, 1);
+	var npdirs = NSSearchPathForDirectoriesInDomains(index, NSUserDomainMask, 1);
+	var len = ObjC.Object(npdirs).count();
+	if (len == 0) {
+		return '';
+	}
 	return ObjC.Object(npdirs).objectAtIndex_(0).toString();
 }
 
@@ -219,15 +219,31 @@ function dumpModule(name) {
 	}
 	if (targetmod == null) {
 		console.log("Cannot find module");
-		return;
 	}
 	var modbase = modules[i].base;
 	var modsize = modules[i].size;
 	var newmodname = modules[i].name + ".decrypted";
-	var newmodpath = getCacheDir() + "/" + newmodname;
-	var oldmodpath = modules[i].path;
+	var finddir = false;
+	var newmodpath = "";
+	var fmodule = -1;
+	var index = 1;
+	while (!finddir) { // 找到一个可写路径
+		try {
+			var base = getCacheDir(index);
+			if (base != null) {
+				newmodpath = getCacheDir(index) + "/" + newmodname;
+				fmodule = open(newmodpath, O_CREAT | O_RDWR, 0);
+				if (fmodule != -1) {
+					break;
+				};
+			}
+		}
+		catch(e) {
+		}
+		index++;
+	}
 	
-	var fmodule = open(newmodpath, O_CREAT | O_RDWR, 0);
+	var oldmodpath = modules[i].path;
 	var foldmodule = open(oldmodpath, O_RDONLY, 0);
 	if (fmodule == -1 || foldmodule == -1) {
 		console.log("Cannot open file" + newmodpath);
@@ -283,10 +299,3 @@ function dumpModule(name) {
 	close(fmodule);
 	close(foldmodule);
 }	
-
-/*
-	Usage:   dumpModule("BWA.app");   dumpModule("aaa.dylib")
-	[iPhone::PID::20457]-> dumpModule(".app")
-	Fix decrypted at:ac0
-	Fix decrypted at:4000
-*/
