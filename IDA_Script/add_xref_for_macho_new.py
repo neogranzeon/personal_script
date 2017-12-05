@@ -8,7 +8,7 @@ import threading
 import os
 import pickle
 import sqlite3
-from multiprocessing import cpu_count
+# from multiprocessing import cpu_count
 
 
 def addxref(x, y, z, i, k):
@@ -141,7 +141,7 @@ def addobjcref():
         cx.close()
         print 'Analyse %d xrefs ok' % (count)
 
-    pool = threadpool.ThreadPool(cpu_count() * 2)
+    pool = threadpool.ThreadPool(8)
     cx = sqlite3.connect(dbfilename)
     cu = cx.cursor()
     cu.execute('select * from xref')

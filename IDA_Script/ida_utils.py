@@ -47,3 +47,23 @@ def sortfuncbysize(begin, end):
     arr = sorted(addr_map.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)
     for item in arr:
         print("%x-%x" % (item[0], item[1]))
+		
+def GetSegRange(segname):
+    seg = FirstSeg() 
+    while seg != 0xffffffff: 
+        if SegName(seg) == segname: 
+            break
+        seg = NextSeg(seg)
+    if seg == 0xffffffff:
+        return 0, 0
+    return SegStart(seg), SegEnd(seg)       
+
+def AddCFStringRef():
+    begin, end = GetSegRange('__cfstring')
+    if begin == 0:
+        return
+    count = (end - begin) / 16
+    for i in range(0, count):
+        cfstring = begin + i * 16
+        cstring = Dword(cfstring + 8)
+        AddCodeXref(cfstring, cstring, XREF_USER | fl_F)
