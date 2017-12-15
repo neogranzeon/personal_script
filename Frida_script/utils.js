@@ -119,7 +119,7 @@ function getclassmethod(cls) {
 function forcetrustcert() {
 	Interceptor.replace(Module.findExportByName(null, 'SecTrustEvaluate'),
 		new NativeCallback(function (trust, result) {
-			Memory.writePointer(result, fptr('0x1'));
+			Memory.writePointer(result, ptr('0x1'));
 			 console.log('pass SecTrustEvaluate');
 			return 0;
 		}, 'int', ['pointer', 'pointer'])
@@ -130,24 +130,42 @@ function forcetrustcert() {
 				console.log('pass -[AFSecurityPolicy evaluateServerTrust:forDomain:]')
 			},
 			onLeave: function (retval) {
-				retval.replace(fptr('0x1'));
+				retval.replace(ptr('0x1'));
 			}
 		});
 		
 		Interceptor.attach(ObjC.classes.AFSecurityPolicy['- setAllowInvalidCertificates:'].implementation, {
 			onEnter: function (args) {
+				args[2] = ptr('0x1');
 				console.log('pass -[AFSecurityPolicy setAllowInvalidCertificates:]')
 			},
 			onLeave: function (retval) {
 			}
 		});
-	};
-	if (typeof(ObjC.classes.MKNetworkOperation) !== 'undefined') {
-		Interceptor.attach(ObjC.classes.MKNetworkOperation['- shouldContinueWithInvalidCertificate'].implementation, {
+		Interceptor.attach(ObjC.classes.AFSecurityPolicy['- allowInvalidCertificates'].implementation, {
 			onEnter: function (args) {
+				console.log('pass -[AFSecurityPolicy setAllowInvalidCertificates:]')
 			},
 			onLeave: function (retval) {
-				retval.replace(fptr('0x1'));
+				retval.replace(ptr('0x1'));
+			}
+		});
+	};
+	if (typeof(ObjC.classes.MKNetworkOperation) !== 'undefined') {
+		Interceptor.attach(ObjC.classes.MKNetworkOperation['- setShouldContinueWithInvalidCertificate:'].implementation, {
+			onEnter: function (args) {
+				args[2] = ptr('0x1');
+				console.log('pass -[MKNetworkOperation setShouldContinueWithInvalidCertificate:]')
+			},
+			onLeave: function (retval) {
+			}
+		});	
+		Interceptor.attach(ObjC.classes.MKNetworkOperation['- shouldContinueWithInvalidCertificate'].implementation, {
+			onEnter: function (args) {
+				console.log('pass -[MKNetworkOperation shouldContinueWithInvalidCertificate]')
+			},
+			onLeave: function (retval) {
+				retval.replace(ptr('0x1'));
 			}
 		});
 	}
