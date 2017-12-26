@@ -19,7 +19,7 @@ def get_all_localtypes():
     for i in range(1, ml):
         print i, GetLocalType(i, 6)
 
-def disasm_func(addr)
+def disasm_func(addr):
     #disassemble a function
     begin=GetFunctionAttr(addr,FUNCATTR_START)
     end=GetFunctionAttr(addr,FUNCATTR_END)
@@ -69,7 +69,7 @@ def AddCFStringRef():
         AddCodeXref(cfstring, cstring, XREF_USER | fl_F)
 		
 def SetTypeOnObjCFunc():
-	# 自动标注Objective-C函数参数
+	# auto tag Objective-C parameter type
     segb, sege = GetSegRange('__text')
     segb -= 1
     while NextFunction(segb) != BADADDR:
