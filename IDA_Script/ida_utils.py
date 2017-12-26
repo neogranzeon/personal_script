@@ -96,7 +96,7 @@ def SetTypeOnObjCFunc():
                         newtype = ','.join(origintype)
                         SetType(faddr, newtype)
                 else:
-                    print 'sp:%x' % addr
+                    print 'sp:%x' % faddr
         segb = faddr + funcsize - 1
 
 		
